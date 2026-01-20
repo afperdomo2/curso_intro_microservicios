@@ -15,18 +15,33 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - get_adults
+      - get_children
+      - get_adult_by_id
+      - get_child_by_id
+      - add_adult
+      - add_child
+      - pick_age
+      - add_member
+
   get_adults:
     build:
       context: .
       dockerfile: services/GetAdults/Dockerfile
+    container_name: get_adults_service
     environment: &app_env
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: devuser
       DB_PASSWORD: devpassword123
       DB_NAME: intro_microservicios
-    ports:
-      - "8081:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,9 +50,8 @@ services:
     build:
       context: .
       dockerfile: services/GetChildren/Dockerfile
+    container_name: get_children_service
     environment: *app_env
-    ports:
-      - "8082:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -46,9 +60,8 @@ services:
     build:
       context: .
       dockerfile: services/GetAdultById/Dockerfile
+    container_name: get_adult_by_id_service
     environment: *app_env
-    ports:
-      - "8083:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,9 +70,8 @@ services:
     build:
       context: .
       dockerfile: services/GetChildById/Dockerfile
+    container_name: get_child_by_id_service
     environment: *app_env
-    ports:
-      - "8084:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,9 +80,8 @@ services:
     build:
       context: .
       dockerfile: services/AddAdult/Dockerfile
+    container_name: add_adult_service
     environment: *app_env
-    ports:
-      - "8085:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -81,8 +92,6 @@ services:
       dockerfile: services/AddChild/Dockerfile
     container_name: add_child_service
     environment: *app_env
-    ports:
-      - "8086:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -93,8 +102,6 @@ services:
       dockerfile: services/PickAge/Dockerfile
     container_name: pick_age_service
     environment: *app_env
-    ports:
-      - "8087:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -104,8 +111,8 @@ services:
       context: .
       dockerfile: services/AddMember/Dockerfile
     container_name: add_member_service
-    ports:
-      - "8088:8080"
+    ports: [] # Ensuring no ports are exposed, though empty list is same as omitted
+
 
 volumes:
   postgres_data:

@@ -12,10 +12,10 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8081/Adults",
+          "raw": "http://localhost:8000/Adults",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8081",
+          "port": "8000",
           "path": ["Adults"]
         }
       },
@@ -27,10 +27,10 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8082/Children",
+          "raw": "http://localhost:8000/Children",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8082",
+          "port": "8000",
           "path": ["Children"]
         }
       },
@@ -42,10 +42,10 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8083/Adults/:id",
+          "raw": "http://localhost:8000/Adults/:id",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8083",
+          "port": "8000",
           "path": ["Adults", ":id"],
           "variable": [
             {
@@ -63,10 +63,10 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8084/Children/:id",
+          "raw": "http://localhost:8000/Children/:id",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8084",
+          "port": "8000",
           "path": ["Children", ":id"],
           "variable": [
             {
@@ -94,10 +94,10 @@
           "raw": "{\n    \"name\": \"Juan\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 1985,\n    \"image_url\": \"https://example.com/juan.jpg\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8085/Add/Adults",
+          "raw": "http://localhost:8000/Add/Adults",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8085",
+          "port": "8000",
           "path": ["Add", "Adults"]
         }
       },
@@ -119,11 +119,51 @@
           "raw": "{\n    \"name\": \"Pedrito\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 2015,\n    \"image_url\": \"https://example.com/pedrito.jpg\"\n}"
         },
         "url": {
-          "raw": "http://localhost:8086/Add/Children",
+          "raw": "http://localhost:8000/Add/Children",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8086",
+          "port": "8000",
           "path": ["Add", "Children"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pick Age",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/PickAge",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["PickAge"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Member",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"member_name\": \"New Member\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/Add/Member",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["Add", "Member"]
         }
       },
       "response": []
