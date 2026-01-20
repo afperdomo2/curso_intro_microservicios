@@ -2,11 +2,26 @@
 
 ## Descripción
 
-Este proyecto es una API RESTful construida con Go, Gin Framework y GORM como parte del curso de introducción a microservicios. Se conecta a una base de datos PostgreSQL.
+Este proyecto es ahora una arquitectura de **microservicios** construida con Go, Gin Framework y GORM. Cada endpoint ha sido desacoplado en su propio servicio independiente.
+
+## Estructura del Proyecto
+
+El proyecto se ha reestructurado de la siguiente manera:
+
+- `pkg/`: Paquetes compartidos.
+  - `database/`: Lógica de conexión a base de datos (PostgreSQL).
+  - `models/`: Definiciones de estructuras de datos (Adult, Child).
+- `services/`: Contiene los microservicios individuales.
+  - `GetAdults/`: Servicio para obtener todos los adultos (`GET /Adults`).
+  - `GetChildren/`: Servicio para obtener todos los niños (`GET /Children`).
+  - `GetAdultById/`: Servicio para obtener un adulto por ID (`GET /Adults/:id`).
+  - `GetChildById/`: Servicio para obtener un niño por ID (`GET /Children/:id`).
+  - `AddAdult/`: Servicio para agregar un adulto (`POST /Add/Adults`).
+  - `AddChild/`: Servicio para agregar un niño (`POST /Add/Children`).
 
 ## Configuración de Base de Datos
 
-El proyecto espera una base de datos PostgreSQL corriendo en localhost.
+Todos los servicios comparten la misma base de datos PostgreSQL:
 
 - **Host**: localhost
 - **Puerto**: 5433
@@ -14,50 +29,26 @@ El proyecto espera una base de datos PostgreSQL corriendo en localhost.
 - **Contraseña**: devpassword123
 - **Base de datos**: intro_microservicios
 
-Las tablas `adults` y `children` se migrarán automáticamente al iniciar la aplicación.
+## Ejecución de Microservicios
 
-## Modelos de Datos
+Cada servicio es una aplicación Go independiente. Para ejecutar un servicio específico, navega a su directorio o usa `go run`.
 
-### Adult / Child
-- **id**: UUID (Generado automáticamente)
-- **name**: String
-- **last_name**: String
-- **birth_year**: Int
-- **image_url**: String
+**Nota**: Todos los servicios están configurados para escuchar en el puerto `8080` por defecto. Para ejecutarlos simultáneamente, necesitarás configurar puertos diferentes o usar contenedores.
 
-## Endpoints implementados
+Ejemplo para ejecutar el servicio `GetAdults`:
 
-La API incluye los siguientes endpoints:
+```bash
+go run services/GetAdults/main.go
+```
 
-- **GET** `/Adults`: Obtiene la lista de todos los adultos registrados.
-- **GET** `/Children`: Obtiene la lista de todos los niños registrados.
-- **GET** `/Adults/{id}`: Obtiene un adulto por su ID.
-- **GET** `/Children/{id}`: Obtiene un niño por su ID.
-- **POST** `/Add/Adults`: Agrega un nuevo adulto a la base de datos.
-- **POST** `/Add/Children`: Agrega un nuevo niño a la base de datos.
+Ejemplo para ejecutar el servicio `AddChild`:
 
-## Ejecución
-
-Para ejecutar el proyecto:
-
-1. Asegúrate de que la base de datos PostgreSQL esté corriendo y las credenciales sean correctas.
-2. Instala las dependencias:
-   ```bash
-   go mod tidy
-   ```
-3. Ejecuta la aplicación:
-   ```bash
-   go run main.go
-   ```
+```bash
+go run services/AddChild/main.go
+```
 
 ## Documentación API (Swagger)
 
-La documentación interactiva de la API está disponible a través de Swagger.
-
-1. Inicia el servidor.
-2. Abre tu navegador y ve a:
+Cada servicio mantiene su propia instancia de Swagger si se ejecuta independientemente.
 
 <http://localhost:8080/swagger/index.html>
-
-Allí podrás ver los ejemplos de requests y probar los endpoints.
-
