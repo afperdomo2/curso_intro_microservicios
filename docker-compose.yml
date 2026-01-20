@@ -34,7 +34,7 @@ services:
   get_adults:
     build:
       context: .
-      dockerfile: services/GetAdults/Dockerfile
+      dockerfile: services/get-adults/Dockerfile
     container_name: get_adults_service
     environment: &app_env
       DB_HOST: postgres
@@ -49,7 +49,7 @@ services:
   get_children:
     build:
       context: .
-      dockerfile: services/GetChildren/Dockerfile
+      dockerfile: services/get-children/Dockerfile
     container_name: get_children_service
     environment: *app_env
     depends_on:
@@ -59,7 +59,7 @@ services:
   get_adult_by_id:
     build:
       context: .
-      dockerfile: services/GetAdultById/Dockerfile
+      dockerfile: services/get-adult-by-id/Dockerfile
     container_name: get_adult_by_id_service
     environment: *app_env
     depends_on:
@@ -69,7 +69,7 @@ services:
   get_child_by_id:
     build:
       context: .
-      dockerfile: services/GetChildById/Dockerfile
+      dockerfile: services/get-child-by-id/Dockerfile
     container_name: get_child_by_id_service
     environment: *app_env
     depends_on:
@@ -79,7 +79,7 @@ services:
   add_adult:
     build:
       context: .
-      dockerfile: services/AddAdult/Dockerfile
+      dockerfile: services/add-adult/Dockerfile
     container_name: add_adult_service
     environment: *app_env
     depends_on:
@@ -89,7 +89,7 @@ services:
   add_child:
     build:
       context: .
-      dockerfile: services/AddChild/Dockerfile
+      dockerfile: services/add-child/Dockerfile
     container_name: add_child_service
     environment: *app_env
     depends_on:
@@ -99,7 +99,7 @@ services:
   pick_age:
     build:
       context: .
-      dockerfile: services/PickAge/Dockerfile
+      dockerfile: services/pick-age/Dockerfile
     container_name: pick_age_service
     environment: *app_env
     depends_on:
@@ -109,7 +109,7 @@ services:
   add_member:
     build:
       context: .
-      dockerfile: services/AddMember/Dockerfile
+      dockerfile: services/add-member/Dockerfile
     container_name: add_member_service
     ports: [] # Ensuring no ports are exposed, though empty list is same as omitted
 

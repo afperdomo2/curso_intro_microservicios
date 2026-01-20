@@ -1,0 +1,20 @@
+# Ignorar control de versiones e IDEs
+.git
+.vscode
+.idea
+
+# Ignorar archivos compilados locales y temporales
+*.exe
+*.test
+debug
+__debug_bin
+
+# Ignorar datos de volumenes
+postgres_data
+
+# Ignorar documentación y configuraciones de entorno local
+README.md
+docker-compose.yml
+intro_microservicios_collection.json
+requests.http
+.DS_Store
