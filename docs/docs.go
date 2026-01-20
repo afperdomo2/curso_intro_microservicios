@@ -18,6 +18,9 @@ const docTemplate = `{
         "/Add/Adults": {
             "post": {
                 "description": "Add a new adult",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -25,6 +28,17 @@ const docTemplate = `{
                     "Adults"
                 ],
                 "summary": "Add a new adult",
+                "parameters": [
+                    {
+                        "description": "Adult Object",
+                        "name": "adult",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Adult"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -38,6 +52,9 @@ const docTemplate = `{
         "/Add/Children": {
             "post": {
                 "description": "Add a new child",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -45,6 +62,17 @@ const docTemplate = `{
                     "Children"
                 ],
                 "summary": "Add a new child",
+                "parameters": [
+                    {
+                        "description": "Child Object",
+                        "name": "child",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Child"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -69,7 +97,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Adult"
+                            }
                         }
                     }
                 }
@@ -98,7 +129,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "$ref": "#/definitions/main.Adult"
                         }
                     }
                 }
@@ -118,7 +149,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Child"
+                            }
                         }
                     }
                 }
@@ -147,7 +181,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Response"
+                            "$ref": "#/definitions/main.Child"
                         }
                     }
                 }
@@ -155,6 +189,56 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "main.Adult": {
+            "type": "object",
+            "properties": {
+                "birth_year": {
+                    "type": "integer",
+                    "example": 1990
+                },
+                "id": {
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/photo.jpg"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "main.Child": {
+            "type": "object",
+            "properties": {
+                "birth_year": {
+                    "type": "integer",
+                    "example": 2015
+                },
+                "id": {
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/child_photo.jpg"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Jane"
+                }
+            }
+        },
         "main.Response": {
             "type": "object",
             "properties": {
