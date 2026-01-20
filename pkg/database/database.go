@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"afperdomo2/go/microservicios/pkg/models"
 
@@ -14,7 +15,29 @@ var DB *gorm.DB
 
 func InitDB() {
 	var err error
-	dsn := "host=localhost user=devuser password=devpassword123 dbname=intro_microservicios port=5433 sslmode=disable"
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5433"
+	}
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "devuser"
+	}
+	password := os.Getenv("DB_PASSWORD")
+	if password == "" {
+		password = "devpassword123"
+	}
+	dbname := os.Getenv("DB_NAME")
+	if dbname == "" {
+		dbname = "intro_microservicios"
+	}
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, port)
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)

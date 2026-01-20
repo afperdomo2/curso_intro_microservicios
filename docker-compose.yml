@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpassword123
+      POSTGRES_DB: intro_microservicios
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d intro_microservicios"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  get_adults:
+    build:
+      context: .
+      dockerfile: services/GetAdults/Dockerfile
+    environment: &app_env
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: devuser
+      DB_PASSWORD: devpassword123
+      DB_NAME: intro_microservicios
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  get_children:
+    build:
+      context: .
+      dockerfile: services/GetChildren/Dockerfile
+    environment: *app_env
+    ports:
+      - "8082:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  get_adult_by_id:
+    build:
+      context: .
+      dockerfile: services/GetAdultById/Dockerfile
+    environment: *app_env
+    ports:
+      - "8083:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  get_child_by_id:
+    build:
+      context: .
+      dockerfile: services/GetChildById/Dockerfile
+    environment: *app_env
+    ports:
+      - "8084:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  add_adult:
+    build:
+      context: .
+      dockerfile: services/AddAdult/Dockerfile
+    environment: *app_env
+    ports:
+      - "8085:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  add_child:
+    build:
+      context: .
+      dockerfile: services/AddChild/Dockerfile
+    environment: *app_env
+    ports:
+      - "8086:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

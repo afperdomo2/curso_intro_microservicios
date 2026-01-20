@@ -2,53 +2,45 @@
 
 ## Descripción
 
-Este proyecto es ahora una arquitectura de **microservicios** construida con Go, Gin Framework y GORM. Cada endpoint ha sido desacoplado en su propio servicio independiente.
+Este proyecto es una arquitectura de **microservicios** construida con Go, Gin Framework y GORM. Cada endpoint ha sido desacoplado en su propio servicio independiente y "containerizado" con Docker.
 
 ## Estructura del Proyecto
 
-El proyecto se ha reestructurado de la siguiente manera:
-
-- `pkg/`: Paquetes compartidos.
-  - `database/`: Lógica de conexión a base de datos (PostgreSQL).
-  - `models/`: Definiciones de estructuras de datos (Adult, Child).
-- `services/`: Contiene los microservicios individuales.
-  - `GetAdults/`: Servicio para obtener todos los adultos (`GET /Adults`).
-  - `GetChildren/`: Servicio para obtener todos los niños (`GET /Children`).
-  - `GetAdultById/`: Servicio para obtener un adulto por ID (`GET /Adults/:id`).
-  - `GetChildById/`: Servicio para obtener un niño por ID (`GET /Children/:id`).
-  - `AddAdult/`: Servicio para agregar un adulto (`POST /Add/Adults`).
-  - `AddChild/`: Servicio para agregar un niño (`POST /Add/Children`).
+- `pkg/`: Paquetes compartidos (conexión DB, modelos).
+- `services/`: Código fuente de cada microservicio.
+- `docker-compose.yml`: Orquestación de contenedores.
+- `intro_microservicios_collection.json`: Colección de Postman para probar la API.
 
 ## Configuración de Base de Datos
 
-Todos los servicios comparten la misma base de datos PostgreSQL:
+El proyecto incluye un contenedor de PostgreSQL configurado automáticamente en el `docker-compose.yml`.
 
-- **Host**: localhost
-- **Puerto**: 5433
-- **Usuario**: devuser
-- **Contraseña**: devpassword123
-- **Base de datos**: intro_microservicios
+- **Credenciales**: Usuario `devuser`, Contraseña `devpassword123`.
+- **Database**: `intro_microservicios`.
 
-## Ejecución de Microservicios
+## Ejecución con Docker Compose
 
-Cada servicio es una aplicación Go independiente. Para ejecutar un servicio específico, navega a su directorio o usa `go run`.
-
-**Nota**: Todos los servicios están configurados para escuchar en el puerto `8080` por defecto. Para ejecutarlos simultáneamente, necesitarás configurar puertos diferentes o usar contenedores.
-
-Ejemplo para ejecutar el servicio `GetAdults`:
+La forma recomendada de levantar todo el entorno es usando Docker Compose. Esto iniciará la base de datos y todos los microservicios, mapeando sus puertos para acceso local.
 
 ```bash
-go run services/GetAdults/main.go
+docker-compose up --build
 ```
 
-Ejemplo para ejecutar el servicio `AddChild`:
+Una vez desplegado, los servicios estarán disponibles en los siguientes puertos:
 
-```bash
-go run services/AddChild/main.go
-```
+| Servicio | Endpoint | Método | URL Local |
+|----------|----------|--------|-----------|
+| GetAdults | `/Adults` | GET | `http://localhost:8081/Adults` |
+| GetChildren | `/Children` | GET | `http://localhost:8082/Children` |
+| GetAdultById | `/Adults/:id` | GET | `http://localhost:8083/Adults/{id}` |
+| GetChildById | `/Children/:id` | GET | `http://localhost:8084/Children/{id}` |
+| AddAdult | `/Add/Adults` | POST | `http://localhost:8085/Add/Adults` |
+| AddChild | `/Add/Children` | POST | `http://localhost:8086/Add/Children` |
 
-## Documentación API (Swagger)
+## Pruebas (Postman)
 
-Cada servicio mantiene su propia instancia de Swagger si se ejecuta independientemente.
+Se ha eliminado la documentación de Swagger en favor de Postman.
 
-<http://localhost:8080/swagger/index.html>
+1. Abre Postman.
+2. Importa el archivo `intro_microservicios_collection.json` ubicado en la raíz del proyecto.
+3. Ejecuta las peticiones directamente contra el entorno local desplegado con Docker.

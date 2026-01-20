@@ -1,0 +1,132 @@
+{
+  "info": {
+    "_postman_id": "intro-microservicios-v1",
+    "name": "Intro Microservicios",
+    "description": "Colección para el curso de introducción a microservicios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Adults",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/Adults",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["Adults"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Children",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8082/Children",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["Children"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Adult By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8083/Adults/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8083",
+          "path": ["Adults", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "UUID-HERE"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Child By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8084/Children/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["Children", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "UUID-HERE"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Adult",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Juan\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 1985,\n    \"image_url\": \"https://example.com/juan.jpg\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8085/Add/Adults",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8085",
+          "path": ["Add", "Adults"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Child",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Pedrito\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 2015,\n    \"image_url\": \"https://example.com/pedrito.jpg\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8086/Add/Children",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8086",
+          "path": ["Add", "Children"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
