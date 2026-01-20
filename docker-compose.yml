@@ -15,6 +15,37 @@ services:
       timeout: 5s
       retries: 5
 
+  # KAFKA (Versión ligera con KRaft - sin Zookeeper)
+  kafka:
+    image: apache/kafka:4.1.1
+    ports:
+      - "9092:9092" # Puerto interno para otros contenedores
+      - "9093:9093" # Puerto externo para clientes en el host
+    environment:
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093,CONTROLLER://:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9094
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+
+  # --- UI PARA KAFKA (Opcional, pero te ayudará mucho a ver los mensajes) ---
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8083:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      - kafka
+
   nginx:
     image: nginx:alpine
     ports:
@@ -42,6 +73,7 @@ services:
       DB_USER: devuser
       DB_PASSWORD: devpassword123
       DB_NAME: intro_microservicios
+      KAFKA_BROKER: kafka:29092
     depends_on:
       postgres:
         condition: service_healthy
@@ -111,8 +143,8 @@ services:
       context: .
       dockerfile: services/add-member/Dockerfile
     container_name: add_member_service
-    ports: [] # Ensuring no ports are exposed, though empty list is same as omitted
-
+    environment: *app_env
 
 volumes:
   postgres_data:
+  kafka_data:
