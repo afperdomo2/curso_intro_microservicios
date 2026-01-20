@@ -36,6 +36,8 @@ Una vez desplegado, los servicios estarán disponibles en los siguientes puertos
 | GetChildById | `/Children/:id` | GET | `http://localhost:8084/Children/{id}` |
 | AddAdult | `/Add/Adults` | POST | `http://localhost:8085/Add/Adults` |
 | AddChild | `/Add/Children` | POST | `http://localhost:8086/Add/Children` |
+| PickAge | `/PickAge` | GET | `http://localhost:8087/PickAge` |
+| AddMember | `/Add/Member` | POST | `http://localhost:8088/Add/Member` |
 
 ## Pruebas (Postman)
 

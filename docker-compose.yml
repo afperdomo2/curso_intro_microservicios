@@ -79,12 +79,33 @@ services:
     build:
       context: .
       dockerfile: services/AddChild/Dockerfile
+    container_name: add_child_service
     environment: *app_env
     ports:
       - "8086:8080"
     depends_on:
       postgres:
         condition: service_healthy
+
+  pick_age:
+    build:
+      context: .
+      dockerfile: services/PickAge/Dockerfile
+    container_name: pick_age_service
+    environment: *app_env
+    ports:
+      - "8087:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  add_member:
+    build:
+      context: .
+      dockerfile: services/AddMember/Dockerfile
+    container_name: add_member_service
+    ports:
+      - "8088:8080"
 
 volumes:
   postgres_data:
