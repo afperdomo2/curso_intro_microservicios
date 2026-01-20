@@ -39,10 +39,18 @@ Una vez desplegado, los servicios estarán disponibles a través del **API Gatew
 | PickAge | `/PickAge` | GET | `http://localhost:8000/PickAge` |
 | AddMember | `/Add/Member` | POST | `http://localhost:8000/Add/Member` |
 
-## Pruebas (Postman)
+## Pruebas
 
-Se ha eliminado la documentación de Swagger en favor de Postman.
+### Opción 1: Postman
 
 1. Abre Postman.
 2. Importa el archivo `intro_microservicios_collection.json` ubicado en la raíz del proyecto.
 3. Ejecuta las peticiones directamente contra el entorno local desplegado con Docker.
+
+### Opción 2: VS Code REST Client
+
+Si utilizas la extensión **REST Client** en VS Code, puedes ejecutar las peticiones directamente desde el editor:
+
+1. Abre el archivo `requests.http`.
+2. Haz clic en "Send Request" sobre cada definición de endpoint.
+

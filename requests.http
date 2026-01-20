@@ -1,0 +1,54 @@
+@host = http://localhost:8000
+@contentType = application/json
+
+### Get Adults
+GET {{host}}/Adults
+Accept: {{contentType}}
+
+### Get Children
+GET {{host}}/Children
+Accept: {{contentType}}
+
+### Get PickAge
+GET {{host}}/PickAge
+Accept: {{contentType}}
+
+### Add Adult
+POST {{host}}/Add/Adults
+Content-Type: {{contentType}}
+
+{
+    "name": "Juan",
+    "last_name": "Perez",
+    "birth_year": 1985,
+    "image_url": "https://example.com/juan.jpg"
+}
+
+### Add Child
+POST {{host}}/Add/Children
+Content-Type: {{contentType}}
+
+{
+    "name": "Pedrito",
+    "last_name": "Perez",
+    "birth_year": 2015,
+    "image_url": "https://example.com/pedrito.jpg"
+}
+
+### Add Member
+POST {{host}}/Add/Member
+Content-Type: {{contentType}}
+
+{
+    "member_name": "New Member"
+}
+
+### Get Adult By ID (Replace UUID)
+# @name getAdultById
+GET {{host}}/Adults/YOUR-UUID-HERE
+Accept: {{contentType}}
+
+### Get Child By ID (Replace UUID)
+# @name getChildById
+GET {{host}}/Children/YOUR-UUID-HERE
+Accept: {{contentType}}
