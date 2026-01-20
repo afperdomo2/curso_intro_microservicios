@@ -1,0 +1,105 @@
+basePath: /
+definitions:
+  main.Response:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing Adults and Children
+  title: ApiGlobal
+  version: "1.0"
+paths:
+  /Add/Adults:
+    post:
+      description: Add a new adult
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Add a new adult
+      tags:
+      - Adults
+  /Add/Children:
+    post:
+      description: Add a new child
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Add a new child
+      tags:
+      - Children
+  /Adults:
+    get:
+      description: Get a list of adults
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Get all adults
+      tags:
+      - Adults
+  /Adults/{id}:
+    get:
+      description: Get a specific adult by ID
+      parameters:
+      - description: Adult ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Get adult by ID
+      tags:
+      - Adults
+  /Children:
+    get:
+      description: Get a list of children
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Get all children
+      tags:
+      - Children
+  /Children/{id}:
+    get:
+      description: Get a specific child by ID
+      parameters:
+      - description: Child ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+      summary: Get child by ID
+      tags:
+      - Children
+swagger: "2.0"

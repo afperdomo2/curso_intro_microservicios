@@ -1,0 +1,161 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for managing Adults and Children",
+        "title": "ApiGlobal",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/Add/Adults": {
+            "post": {
+                "description": "Add a new adult",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Adults"
+                ],
+                "summary": "Add a new adult",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/Add/Children": {
+            "post": {
+                "description": "Add a new child",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Children"
+                ],
+                "summary": "Add a new child",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/Adults": {
+            "get": {
+                "description": "Get a list of adults",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Adults"
+                ],
+                "summary": "Get all adults",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/Adults/{id}": {
+            "get": {
+                "description": "Get a specific adult by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Adults"
+                ],
+                "summary": "Get adult by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Adult ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/Children": {
+            "get": {
+                "description": "Get a list of children",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Children"
+                ],
+                "summary": "Get all children",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/Children/{id}": {
+            "get": {
+                "description": "Get a specific child by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Children"
+                ],
+                "summary": "Get child by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Child ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Response": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
