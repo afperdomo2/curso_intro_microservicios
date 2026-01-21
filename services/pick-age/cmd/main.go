@@ -15,8 +15,12 @@ func main() {
 	// Cargar configuración
 	cfg := config.LoadConfig()
 
-	// Crear kConsumer para escuchar el topic
-	kConsumer := kafka.NewConsumer("members.registration.fct.member.received", cfg.KafkaBroker)
+	// Crear productor para publicar clasificaciones
+	kProducer := kafka.NewProducer(cfg.KafkaBroker)
+	defer kProducer.Close()
+
+	// Crear consumer para escuchar el topic de registros
+	kConsumer := kafka.NewConsumer("members.registration.fct.member.received", cfg.KafkaBroker, kProducer)
 	defer kConsumer.Close()
 
 	// Crear contexto para cancelar el consumer gracefully
@@ -30,6 +34,7 @@ func main() {
 		log.Println("📍 Apagando gracefully...")
 		cancel()
 		kConsumer.Close()
+		kProducer.Close()
 		os.Exit(0)
 	}()
 

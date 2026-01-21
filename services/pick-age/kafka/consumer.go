@@ -6,18 +6,21 @@ import (
 	"log"
 	"time"
 
+	"afperdomo2/go/microservicios/services/pick-age/classifier"
 	"afperdomo2/go/microservicios/services/pick-age/models"
 
 	"github.com/segmentio/kafka-go"
 )
 
-// Consumer encapsula la lógica para recibir y procesar mensajes de Kafka
+// Consumer es responsable únicamente de leer mensajes de Kafka
 type Consumer struct {
-	reader *kafka.Reader
+	reader     *kafka.Reader
+	classifier *classifier.Classifier
+	publisher  *Producer
 }
 
 // NewConsumer crea una nueva instancia del consumidor de Kafka
-func NewConsumer(topic string, brokerAddr string) *Consumer {
+func NewConsumer(topic string, brokerAddr string, publisher *Producer) *Consumer {
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:        []string{brokerAddr},
 		Topic:          topic,
@@ -29,7 +32,9 @@ func NewConsumer(topic string, brokerAddr string) *Consumer {
 
 	log.Printf("🔊 Kafka Consumer inicializado para topic '%s' en %s", topic, brokerAddr)
 	return &Consumer{
-		reader: reader,
+		reader:     reader,
+		classifier: classifier.NewClassifier(),
+		publisher:  publisher,
 	}
 }
 
@@ -60,22 +65,20 @@ func (c *Consumer) Start(ctx context.Context) error {
 			continue
 		}
 
-		// Procesar el miembro (calcular edad y loguear)
-		c.processMember(member)
+		// Procesar el miembro (clasificar y publicar)
+		c.processMember(ctx, member)
 	}
 }
 
-// processMember analiza la edad del miembro y loguea si es adulto o menor
-func (c *Consumer) processMember(member models.Member) {
-	currentYear := time.Now().Year()
-	age := currentYear - member.BirthYear
+// processMember es responsable de orquestar la clasificación y publicación
+func (c *Consumer) processMember(ctx context.Context, member models.Member) {
+	// Clasificar el miembro
+	classification := c.classifier.Classify(member)
 
-	if age >= 18 {
-		log.Printf("👤 ADULTO: %s %s - Nacido en %d (edad: %d años)",
-			member.Name, member.LastName, member.BirthYear, age)
-	} else {
-		log.Printf("👶 MENOR: %s %s - Nacido en %d (edad: %d años)",
-			member.Name, member.LastName, member.BirthYear, age)
+	// Publicar la clasificación al topic correspondiente
+	if err := c.publisher.PublishClassification(ctx, classification); err != nil {
+		log.Printf("[ERROR] ❌ Error publicando clasificación para %s %s: %v",
+			member.Name, member.LastName, err)
 	}
 }
 
