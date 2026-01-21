@@ -53,6 +53,11 @@ services:
       # - KAFKA_SOCKET_RECEIVE_BUFFER_BYTES=102400
       # - KAFKA_SOCKET_REQUEST_MAX_BYTES=104857600 # 100MB
       # - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false # Desactivar en producción
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # --- UI PARA KAFKA (Opcional, pero te ayudará mucho a ver los mensajes) ---
   kafka-ui:
@@ -153,6 +158,8 @@ services:
     container_name: pick_age_service
     environment: *app_env
     depends_on:
+      kafka:
+        condition: service_healthy
       add_adult:
         condition: service_started
       add_child:
@@ -166,7 +173,7 @@ services:
     environment: *app_env
     depends_on:
       kafka:
-        condition: service_started
+        condition: service_healthy
       pick_age:
         condition: service_started
 
