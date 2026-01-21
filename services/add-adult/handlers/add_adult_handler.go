@@ -20,5 +20,5 @@ func AddAdult(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, models.Response{Message: "Adult added successfully"})
+	c.JSON(http.StatusOK, models.Response{Message: "Adulto agregado correctamente"})
 }

@@ -13,7 +13,7 @@ func GetChildById(c *gin.Context) {
 	id := c.Param("id")
 	var child models.Child
 	if err := database.DB.First(&child, "id = ?", id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Child not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Niño no encontrado"})
 		return
 	}
 	c.JSON(http.StatusOK, child)

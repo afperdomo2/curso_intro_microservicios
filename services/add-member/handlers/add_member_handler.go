@@ -31,7 +31,7 @@ func (h *AddMemberHandler) AddMember(c *gin.Context) {
 	// Validar el JSON recibido
 	if err := c.ShouldBindJSON(&member); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "Invalid request body",
+			"error":   "Cuerpo de solicitud inválido",
 			"details": err.Error(),
 		})
 		return
@@ -52,7 +52,7 @@ func (h *AddMemberHandler) AddMember(c *gin.Context) {
 	messageKey := fmt.Sprintf("member-%s-%s", member.Name, member.LastName)
 	if err := h.kafkaProducer.SendMessage(ctx, messageKey, message); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "Failed to send message to Kafka",
+			"error":   "No se pudo enviar el mensaje a Kafka",
 			"details": err.Error(),
 		})
 		return
@@ -60,7 +60,7 @@ func (h *AddMemberHandler) AddMember(c *gin.Context) {
 
 	// Respuesta exitosa
 	c.JSON(http.StatusOK, gin.H{
-		"message": fmt.Sprintf("Member %s %s added successfully", member.Name, member.LastName),
+		"message": fmt.Sprintf("Miembro %s %s agregado correctamente", member.Name, member.LastName),
 		"data":    message,
 	})
 }

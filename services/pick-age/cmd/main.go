@@ -1,17 +1,43 @@
 package main
 
 import (
-	"afperdomo2/go/microservicios/pkg/database"
-	"afperdomo2/go/microservicios/services/pick-age/handlers"
+	"context"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/gin-gonic/gin"
+	"afperdomo2/go/microservicios/services/pick-age/config"
+	"afperdomo2/go/microservicios/services/pick-age/kafka"
 )
 
 func main() {
-	database.InitDB()
-	r := gin.Default()
+	// Cargar configuración
+	cfg := config.LoadConfig()
 
-	r.GET("/PickAge", handlers.PickAge)
+	// Crear kConsumer para escuchar el topic
+	kConsumer := kafka.NewConsumer("members.registration.fct.member.received", cfg.KafkaBroker)
+	defer kConsumer.Close()
 
-	r.Run(":8080")
+	// Crear contexto para cancelar el consumer gracefully
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// Manejar señales de cierre
+	go func() {
+		sigChan := make(chan os.Signal, 1)
+		signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+		<-sigChan
+		log.Println("📍 Apagando gracefully...")
+		cancel()
+		kConsumer.Close()
+		os.Exit(0)
+	}()
+
+	// Iniciar el consumer (bloqueante)
+	log.Println("🚀 Iniciando servicio PickAge...")
+	if err := kConsumer.Start(ctx); err != nil && err != context.Canceled {
+		log.Fatalf("[ERROR] ❌ Error en consumer: %v", err)
+	}
+
+	log.Println("🛑 Servicio PickAge detenido")
 }

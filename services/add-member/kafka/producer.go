@@ -48,7 +48,7 @@ func NewProducer(topic string, brokerAddr string) *Producer {
 		AllowAutoTopicCreation: false, // Ya estamos creando el topic manualmente
 	}
 
-	log.Printf("Kafka Producer initialized for topic '%s' at %s", topic, brokerAddr)
+	log.Printf("🚀 Productor de Kafka inicializado para topic '%s' en %s", topic, brokerAddr)
 	return &Producer{writer: writer}
 }
 
@@ -57,7 +57,7 @@ func (p *Producer) SendMessage(ctx context.Context, key string, value interface{
 	// Serializar el mensaje a JSON
 	messageBytes, err := json.Marshal(value)
 	if err != nil {
-		return fmt.Errorf("error serializing message: %w", err)
+		return fmt.Errorf("error al serializar mensaje: %w", err)
 	}
 
 	// Crear el mensaje de Kafka
@@ -68,10 +68,10 @@ func (p *Producer) SendMessage(ctx context.Context, key string, value interface{
 
 	// Enviar el mensaje
 	if err := p.writer.WriteMessages(ctx, msg); err != nil {
-		return fmt.Errorf("error sending message to Kafka: %w", err)
+		return fmt.Errorf("error al enviar mensaje a Kafka: %w", err)
 	}
 
-	log.Printf("Message sent to Kafka topic '%s': %s", p.writer.Topic, string(messageBytes))
+	log.Printf("📨 Mensaje enviado al topic de Kafka '%s': %s", p.writer.Topic, string(messageBytes))
 	return nil
 }
 

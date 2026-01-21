@@ -36,8 +36,9 @@ Una vez desplegado, los servicios estarán disponibles a través del **API Gatew
 | GetChildById | `/Children/:id` | GET | `http://localhost:8000/Children/{id}` |
 | AddAdult | `/Add/Adults` | POST | `http://localhost:8000/Add/Adults` |
 | AddChild | `/Add/Children` | POST | `http://localhost:8000/Add/Children` |
-| PickAge | `/PickAge` | GET | `http://localhost:8000/PickAge` |
 | AddMember | `/Add/Member` | POST | `http://localhost:8000/Add/Member` |
+
+> **Nota**: El servicio `PickAge` ahora es un **Kafka Consumer/Processor** sin endpoint HTTP. Escucha el topic `pickage` y procesa mensajes en background.
 
 ## 📨 Servicio AddMember (Kafka)
 
@@ -87,6 +88,40 @@ services/add-member/
 - ⏱️ Retención: 72 horas (3 días)
 - 💾 Almacenamiento: Máximo 10GB
 - 🔗 Sincronización: RequireAll (todas las replicas confirman)
+
+Ver configuración en `docker-compose.yml` sección Kafka.
+
+## 📊 Servicio PickAge (Kafka Consumer Simple)
+
+El servicio `pick-age` es un **consumidor de Kafka** que escucha el topic `pickage` y loguea si los miembros son adultos (18+) o menores de edad.
+
+### 🔄 Flujo de Proceso
+
+1. **Recibe**: Escucha mensajes del topic `pickage` (publicados por `add-member`)
+2. **Procesa**: Calcula edad basándose en el año de nacimiento actual
+3. **Loguea**: 
+   - `👤 ADULTO: [Nombre] [Apellido] - Nacido en [Año] (edad: [Años] años)` si tiene 18+
+   - `👶 MENOR: [Nombre] [Apellido] - Nacido en [Año] (edad: [Años] años)` si es menor
+
+### 📁 Estructura del Servicio
+
+```
+services/pick-age/
+├── cmd/main.go              # Punto de entrada
+├── config/config.go         # Gestión de configuración
+├── kafka/consumer.go        # Consumer que procesa directamente
+├── models/member.go         # Modelo de datos
+├── .env.example             # Plantilla de variables
+└── Dockerfile               # Configuración de contenedor
+```
+
+### ✨ Características
+
+- 👂 **Consumer de Kafka**: Escucha el topic `pickage` continuamente
+- 🔍 **Análisis de Edad**: Calcula edad en tiempo real
+- 📝 **Logging Simple**: Loguea adultos vs menores
+- 🎯 **Sin Complejidades**: No usa producers, handlers, ni base de datos
+- 🚫 **Sin HTTP**: Puramente event-driven
 
 Ver configuración en `docker-compose.yml` sección Kafka.
 

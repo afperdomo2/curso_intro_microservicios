@@ -20,5 +20,5 @@ func AddChild(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, models.Response{Message: "Child added successfully"})
+	c.JSON(http.StatusOK, models.Response{Message: "Niño agregado correctamente"})
 }

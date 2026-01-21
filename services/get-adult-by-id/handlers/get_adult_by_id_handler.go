@@ -13,7 +13,7 @@ func GetAdultById(c *gin.Context) {
 	id := c.Param("id")
 	var adult models.Adult
 	if err := database.DB.First(&adult, "id = ?", id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Adult not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Adulto no encontrado"})
 		return
 	}
 	c.JSON(http.StatusOK, adult)
