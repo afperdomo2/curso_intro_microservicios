@@ -78,7 +78,6 @@ services:
       - get_child_by_id
       - add_adult
       - add_child
-      - pick_age
       - add_member
 
   get_adults:
@@ -154,8 +153,10 @@ services:
     container_name: pick_age_service
     environment: *app_env
     depends_on:
-      postgres:
-        condition: service_healthy
+      add_adult:
+        condition: service_started
+      add_child:
+        condition: service_started
 
   add_member:
     build:
@@ -163,6 +164,11 @@ services:
       dockerfile: services/add-member/Dockerfile
     container_name: add_member_service
     environment: *app_env
+    depends_on:
+      kafka:
+        condition: service_started
+      pick_age:
+        condition: service_started
 
 volumes:
   postgres_data:
