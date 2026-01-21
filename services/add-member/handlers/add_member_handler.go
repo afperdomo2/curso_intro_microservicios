@@ -42,6 +42,7 @@ func (h *AddMemberHandler) AddMember(c *gin.Context) {
 		Name:      member.Name,
 		LastName:  member.LastName,
 		BirthYear: member.BirthYear,
+		ImageURL:  member.ImageURL,
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 

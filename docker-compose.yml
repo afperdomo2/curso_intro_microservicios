@@ -88,7 +88,6 @@ services:
     build:
       context: .
       dockerfile: services/get-adults/Dockerfile
-    container_name: get_adults_service
     environment: &app_env
       DB_HOST: postgres
       DB_PORT: 5432
@@ -104,7 +103,6 @@ services:
     build:
       context: .
       dockerfile: services/get-children/Dockerfile
-    container_name: get_children_service
     environment: *app_env
     depends_on:
       postgres:
@@ -114,7 +112,6 @@ services:
     build:
       context: .
       dockerfile: services/get-adult-by-id/Dockerfile
-    container_name: get_adult_by_id_service
     environment: *app_env
     depends_on:
       postgres:
@@ -124,7 +121,6 @@ services:
     build:
       context: .
       dockerfile: services/get-child-by-id/Dockerfile
-    container_name: get_child_by_id_service
     environment: *app_env
     depends_on:
       postgres:
@@ -134,7 +130,6 @@ services:
     build:
       context: .
       dockerfile: services/add-adult/Dockerfile
-    container_name: add_adult_service
     environment: *app_env
     depends_on:
       postgres:
@@ -144,7 +139,6 @@ services:
     build:
       context: .
       dockerfile: services/add-child/Dockerfile
-    container_name: add_child_service
     environment: *app_env
     depends_on:
       postgres:
@@ -154,7 +148,6 @@ services:
     build:
       context: .
       dockerfile: services/pick-age/Dockerfile
-    container_name: pick_age_service
     environment: *app_env
     depends_on:
       kafka:
@@ -168,7 +161,6 @@ services:
     build:
       context: .
       dockerfile: services/add-member/Dockerfile
-    container_name: add_member_service
     environment: *app_env
     depends_on:
       kafka:

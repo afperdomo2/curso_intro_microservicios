@@ -5,5 +5,6 @@ type Member struct {
 	Name      string `json:"name"`
 	LastName  string `json:"last_name"`
 	BirthYear int    `json:"birth_year"`
+	ImageURL  string `json:"image_url"`
 	Timestamp string `json:"timestamp"`
 }

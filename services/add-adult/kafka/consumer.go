@@ -16,6 +16,7 @@ type ClassifiedAdult struct {
 	Name        string    `json:"name"`
 	LastName    string    `json:"last_name"`
 	BirthYear   int       `json:"birth_year"`
+	ImageURL    string    `json:"image_url"`
 	Age         int       `json:"age"`
 	PublishedAt time.Time `json:"published_at"`
 }
@@ -78,7 +79,7 @@ func (c *Consumer) Start(ctx context.Context) error {
 
 // processAdult guarda el adulto clasificado en la base de datos
 func (c *Consumer) processAdult(classified ClassifiedAdult) {
-	if err := c.repository.SaveAdult(classified.Name, classified.LastName, classified.BirthYear); err != nil {
+	if err := c.repository.SaveAdult(classified.Name, classified.LastName, classified.BirthYear, classified.ImageURL); err != nil {
 		log.Printf("[ERROR] ❌ Error procesando adulto %s %s: %v",
 			classified.Name, classified.LastName, err)
 		return

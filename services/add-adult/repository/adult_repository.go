@@ -22,12 +22,13 @@ func NewAdultRepository(db *gorm.DB) *AdultRepository {
 }
 
 // SaveAdult guarda un adulto en la base de datos
-func (r *AdultRepository) SaveAdult(name, lastName string, birthYear int) error {
+func (r *AdultRepository) SaveAdult(name, lastName string, birthYear int, imageURL string) error {
 	adult := models.Adult{
 		ID:        uuid.New(),
 		Name:      name,
 		LastName:  lastName,
 		BirthYear: birthYear,
+		ImageURL:  imageURL,
 	}
 
 	if err := r.db.Create(&adult).Error; err != nil {

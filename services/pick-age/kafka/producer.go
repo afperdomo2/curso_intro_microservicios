@@ -16,6 +16,7 @@ type PublishedMember struct {
 	Name        string    `json:"name"`
 	LastName    string    `json:"last_name"`
 	BirthYear   int       `json:"birth_year"`
+	ImageURL    string    `json:"image_url"`
 	Age         int       `json:"age"`
 	PublishedAt time.Time `json:"published_at"`
 }
@@ -69,6 +70,7 @@ func (p *Producer) PublishClassification(ctx context.Context, classification *cl
 		Name:        classification.Member.Name,
 		LastName:    classification.Member.LastName,
 		BirthYear:   classification.Member.BirthYear,
+		ImageURL:    classification.Member.ImageURL,
 		Age:         classification.Age,
 		PublishedAt: time.Now(),
 	}
