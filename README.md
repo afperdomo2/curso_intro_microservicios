@@ -34,11 +34,12 @@ Una vez desplegado, los servicios estarán disponibles a través del **API Gatew
 | GetChildren | `/Children` | GET | `http://localhost:8000/Children` |
 | GetAdultById | `/Adults/:id` | GET | `http://localhost:8000/Adults/{id}` |
 | GetChildById | `/Children/:id` | GET | `http://localhost:8000/Children/{id}` |
-| AddAdult | `/Add/Adults` | POST | `http://localhost:8000/Add/Adults` |
-| AddChild | `/Add/Children` | POST | `http://localhost:8000/Add/Children` |
 | AddMember | `/Add/Member` | POST | `http://localhost:8000/Add/Member` |
+| AddChild | `/Add/Children` | POST | `http://localhost:8000/Add/Children` |
+| AddAdult | N/A (Kafka Consumer) | - | Event-driven desde PickAge |
+| PickAge | N/A (Kafka Consumer/Producer) | - | Event-driven desde AddMember |
 
-> **Nota**: El servicio `PickAge` ahora es un **Kafka Consumer/Processor** sin endpoint HTTP. Escucha el topic `pickage` y procesa mensajes en background.
+> **Nota**: Los servicios `AddAdult` y `PickAge` son **Kafka Consumers** sin endpoint HTTP. Funcionan de forma event-driven en el flujo de mensajería.
 
 ## 📨 Servicio AddMember (Kafka)
 
@@ -139,3 +140,98 @@ Si utilizas la extensión **REST Client** en VS Code, puedes ejecutar las petici
 
 1. Abre el archivo `requests.http`.
 2. Haz clic en "Send Request" sobre cada definición de endpoint.
+
+---
+
+## 🏗️ Flujo de Microservicios con Kafka
+
+El sistema implementa un flujo event-driven utilizando Apache Kafka como bus de mensajería:
+
+### 📊 Diagrama de Flujo
+
+```
+[Cliente HTTP]
+      ↓
+[POST /Add/Member] → add-member service
+      ↓
+  [Produce] → Topic: "members.registration.fct.member.received"
+      ↓
+[pick-age service]
+      ├─→ Classifica por edad
+      ├─→ Si edad >= 18: [Produce] → "members.classification.fct.adult.validated"
+      └─→ Si edad < 18: [Produce] → "members.classification.fct.child.validated"
+      ↓
+[Consumers]
+├─→ add-adult service (consume "members.classification.fct.adult.validated")
+│   └─→ Guarda en tabla "adults"
+│
+└─→ add-child service (consume "members.classification.fct.child.validated")
+    └─→ Guarda en tabla "children"
+```
+
+### 📨 Servicio AddMember (Kafka Producer)
+
+El servicio `add-member` sigue siendo el punto de entrada HTTP. Recibe un miembro y lo publica al topic `members.registration.fct.member.received`.
+
+**Endpoints:**
+- `POST /Add/Member` → Publica evento de miembro registrado
+
+**Topics producidos:**
+- `members.registration.fct.member.received`
+
+---
+
+### 🔄 Servicio PickAge (Kafka Consumer → Producer)
+
+El servicio `pick-age` consume miembros registrados, calcula su edad y los clasifica.
+
+**Arquitectura SOLID:**
+- `classifier/classifier.go`: Lógica de clasificación (SRP)
+- `kafka/consumer.go`: Lectura de eventos (SRP)
+- `kafka/producer.go`: Publicación de eventos clasificados (SRP)
+
+**Topics consumidos:**
+- `members.registration.fct.member.received`
+
+**Topics producidos:**
+- `members.classification.fct.adult.validated` (edad >= 18)
+- `members.classification.fct.child.validated` (edad < 18)
+
+**GroupID:** `pick-age-service`
+
+---
+
+### 👤 Servicio AddAdult (Kafka Consumer)
+
+El servicio `add-adult` consume adultos clasificados y los guarda en la base de datos.
+
+**Ya NO tiene endpoint HTTP** - Es puramente event-driven.
+
+**Arquitectura SOLID:**
+- `repository/adult_repository.go`: Acceso a datos (SRP)
+- `kafka/consumer.go`: Lectura de eventos (SRP)
+- `config/config.go`: Gestión de configuración (SRP)
+
+**Topics consumidos:**
+- `members.classification.fct.adult.validated`
+
+**Base de datos:**
+- Tabla: `adults` (crea automáticamente adultos)
+
+**GroupID:** `add-adult-service`
+
+---
+
+### 👶 Servicio AddChild (Kafka Consumer)
+
+Similar a `add-adult`, este servicio consume menores clasificados y los guarda en la base de datos.
+
+**Ya NO tiene endpoint HTTP** - Es puramente event-driven.
+
+**Topics consumidos:**
+- `members.classification.fct.child.validated`
+
+**Base de datos:**
+- Tabla: `children` (crea automáticamente menores)
+
+**GroupID:** `add-child-service` (si está implementado con Kafka)
