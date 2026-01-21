@@ -81,7 +81,6 @@ services:
       - get_children
       - get_adult_by_id
       - get_child_by_id
-      - add_child
       - add_member
 
   get_adults:

@@ -35,11 +35,11 @@ Una vez desplegado, los servicios estarán disponibles a través del **API Gatew
 | GetAdultById | `/Adults/:id` | GET | `http://localhost:8000/Adults/{id}` |
 | GetChildById | `/Children/:id` | GET | `http://localhost:8000/Children/{id}` |
 | AddMember | `/Add/Member` | POST | `http://localhost:8000/Add/Member` |
-| AddChild | `/Add/Children` | POST | `http://localhost:8000/Add/Children` |
 | AddAdult | N/A (Kafka Consumer) | - | Event-driven desde PickAge |
+| AddChild | N/A (Kafka Consumer) | - | Event-driven desde PickAge |
 | PickAge | N/A (Kafka Consumer/Producer) | - | Event-driven desde AddMember |
 
-> **Nota**: Los servicios `AddAdult` y `PickAge` son **Kafka Consumers** sin endpoint HTTP. Funcionan de forma event-driven en el flujo de mensajería.
+> **Nota**: Los servicios `AddAdult`, `AddChild` y `PickAge` son **Kafka Consumers** sin endpoint HTTP. Funcionan de forma event-driven en el flujo de mensajería.
 
 ## 📨 Servicio AddMember (Kafka)
 
@@ -228,10 +228,15 @@ Similar a `add-adult`, este servicio consume menores clasificados y los guarda e
 
 **Ya NO tiene endpoint HTTP** - Es puramente event-driven.
 
+**Arquitectura SOLID:**
+- `repository/child_repository.go`: Acceso a datos (SRP)
+- `kafka/consumer.go`: Lectura de eventos (SRP)
+- `config/config.go`: Gestión de configuración (SRP)
+
 **Topics consumidos:**
 - `members.classification.fct.child.validated`
 
 **Base de datos:**
 - Tabla: `children` (crea automáticamente menores)
 
-**GroupID:** `add-child-service` (si está implementado con Kafka)
+**GroupID:** `add-child-service`
