@@ -16,6 +16,7 @@ services:
       retries: 5
 
   # KAFKA (Versión ligera con KRaft - sin Zookeeper)
+  # CONFIGURACIÓN PARA PRUEBAS - Ver comentarios para producción
   kafka:
     image: apache/kafka:4.1.1
     ports:
@@ -34,6 +35,24 @@ services:
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+
+      # --- CONFIGURACIÓN DE PRUEBAS ---
+      - KAFKA_LOG_RETENTION_HOURS=24 # 1 día en pruebas
+      - KAFKA_LOG_RETENTION_BYTES=-1 # Sin límite de tamaño en pruebas
+      - KAFKA_NUM_NETWORK_THREADS=2 # Menor uso de recursos
+      - KAFKA_NUM_IO_THREADS=2 # Menor uso de recursos
+
+      # --- CONFIGURACIÓN RECOMENDADA PARA PRODUCCIÓN (8GB RAM, 15GB storage) ---
+      # - KAFKA_LOG_RETENTION_HOURS=72          # 3 días
+      # - KAFKA_LOG_RETENTION_BYTES=10737418240 # 10GB de 15GB disponibles
+      # - KAFKA_LOG_SEGMENT_BYTES=1073741824    # 1GB por segmento
+      # - KAFKA_LOG_CLEANUP_POLICY=delete       # Eliminar mensajes antiguos
+      # - KAFKA_NUM_NETWORK_THREADS=4           # Ajustado a 8GB RAM
+      # - KAFKA_NUM_IO_THREADS=4                # Ajustado a 8GB RAM
+      # - KAFKA_SOCKET_SEND_BUFFER_BYTES=102400
+      # - KAFKA_SOCKET_RECEIVE_BUFFER_BYTES=102400
+      # - KAFKA_SOCKET_REQUEST_MAX_BYTES=104857600 # 100MB
+      # - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false # Desactivar en producción
 
   # --- UI PARA KAFKA (Opcional, pero te ayudará mucho a ver los mensajes) ---
   kafka-ui:
@@ -73,7 +92,7 @@ services:
       DB_USER: devuser
       DB_PASSWORD: devpassword123
       DB_NAME: intro_microservicios
-      KAFKA_BROKER: kafka:29092
+      KAFKA_BROKER: kafka:9092
     depends_on:
       postgres:
         condition: service_healthy

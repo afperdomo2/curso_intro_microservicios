@@ -40,7 +40,9 @@ POST {{host}}/Add/Member
 Content-Type: {{contentType}}
 
 {
-    "member_name": "New Member"
+    "name": "Miranda",
+    "last_name": "Espinoza",
+    "birth_year": 2017
 }
 
 ### Get Adult By ID (Replace UUID)
