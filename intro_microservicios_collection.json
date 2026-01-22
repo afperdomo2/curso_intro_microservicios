@@ -1,172 +1,117 @@
 {
   "info": {
-    "_postman_id": "intro-microservicios-v1",
+    "_postman_id": "intro-microservicios-v2",
     "name": "Intro Microservicios",
-    "description": "Colección para el curso de introducción a microservicios",
+    "description": "Colección para el curso de introducción a microservicios con arquitectura event-driven Kafka",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Get Adults",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/Adults",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Adults"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Children",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/Children",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Children"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Adult By ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/Adults/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Adults", ":id"],
-          "variable": [
-            {
-              "key": "id",
-              "value": "UUID-HERE"
+      "name": "📖 GET - Consultar Datos",
+      "item": [
+        {
+          "name": "Get Adults",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/Adults",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["Adults"]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Child By ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/Children/:id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Children", ":id"],
-          "variable": [
-            {
-              "key": "id",
-              "value": "UUID-HERE"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Children",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/Children",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["Children"]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Add Adult",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"name\": \"Juan\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 1985,\n    \"image_url\": \"https://example.com/juan.jpg\"\n}"
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8000/Add/Adults",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Add", "Adults"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Add Child",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"name\": \"Pedrito\",\n    \"last_name\": \"Perez\",\n    \"birth_year\": 2015,\n    \"image_url\": \"https://example.com/pedrito.jpg\"\n}"
+        {
+          "name": "Get Adult By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/Adults/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["Adults", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "UUID-HERE"
+                }
+              ]
+            }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8000/Add/Children",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Add", "Children"]
+        {
+          "name": "Get Child By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/Children/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["Children", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "UUID-HERE"
+                }
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Pick Age",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/PickAge",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["PickAge"]
+      "name": "📝 POST - Event-Driven (Kafka)",
+      "item": [
+        {
+          "name": "Add Member (Inicia Flujo Kafka)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Carlos\",\n    \"last_name\": \"Rodriguez\",\n    \"birth_year\": 1990,\n    \"image_url\": \"https://example.com/carlos.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/Add/Member",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["Add", "Member"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
-    },
-    {
-      "name": "Add Member",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"member_name\": \"New Member\"\n}"
-        },
-        "url": {
-          "raw": "http://localhost:8000/Add/Member",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["Add", "Member"]
-        }
-      },
-      "response": []
+      ]
     }
   ]
 }
